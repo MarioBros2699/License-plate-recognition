@@ -1,10 +1,3 @@
-E:/Desktop/darknet-master/darknet.lib
-E:/Desktop/darknet-master/darknet.dll
-E:/Desktop/darknet-master/include/darknet/darknet.h
-E:/Desktop/darknet-master/include/darknet/yolo_v2_class.hpp
-E:/Desktop/darknet-master/uselib.exe
-E:/Desktop/darknet-master/darknet.exe
-E:/Desktop/darknet-master/share/darknet/DarknetTargets.cmake
-E:/Desktop/darknet-master/share/darknet/DarknetTargets-release.cmake
-E:/Desktop/darknet-master/share/darknet/DarknetConfig.cmake
-E:/Desktop/darknet-master/share/darknet/DarknetConfigVersion.cmake
+version https://git-lfs.github.com/spec/v1
+oid sha256:234a46cd7e04b4ea8a825dfca0c68387422ea381382d1ab283af568e6f43f741
+size 528
