@@ -1,0 +1,10 @@
+E:/Desktop/darknet-master/darknet.lib
+E:/Desktop/darknet-master/darknet.dll
+E:/Desktop/darknet-master/include/darknet/darknet.h
+E:/Desktop/darknet-master/include/darknet/yolo_v2_class.hpp
+E:/Desktop/darknet-master/uselib.exe
+E:/Desktop/darknet-master/darknet.exe
+E:/Desktop/darknet-master/share/darknet/DarknetTargets.cmake
+E:/Desktop/darknet-master/share/darknet/DarknetTargets-release.cmake
+E:/Desktop/darknet-master/share/darknet/DarknetConfig.cmake
+E:/Desktop/darknet-master/share/darknet/DarknetConfigVersion.cmake

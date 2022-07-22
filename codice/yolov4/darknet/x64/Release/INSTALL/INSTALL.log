@@ -1,0 +1,11 @@
+﻿  -- Install configuration: "Release"
+  -- Installing: E:/Desktop/darknet-master/darknet.lib
+  -- Installing: E:/Desktop/darknet-master/darknet.dll
+  -- Installing: E:/Desktop/darknet-master/include/darknet/darknet.h
+  -- Installing: E:/Desktop/darknet-master/include/darknet/yolo_v2_class.hpp
+  -- Installing: E:/Desktop/darknet-master/uselib.exe
+  -- Installing: E:/Desktop/darknet-master/darknet.exe
+  -- Installing: E:/Desktop/darknet-master/share/darknet/DarknetTargets.cmake
+  -- Installing: E:/Desktop/darknet-master/share/darknet/DarknetTargets-release.cmake
+  -- Installing: E:/Desktop/darknet-master/share/darknet/DarknetConfig.cmake
+  -- Installing: E:/Desktop/darknet-master/share/darknet/DarknetConfigVersion.cmake
