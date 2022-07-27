@@ -31,30 +31,38 @@ def omografia (roi, modello):
         omo = cv.warpPerspective(roi, matrix, (w,h))
         return omo
 
+def verifica_pattern(targa):
+    if len(targa) != 7:
+        return ''
+    if  any(chr.isdigit() for chr in targa[0:2]+targa[5:7]):
+        return ''
+    if  all(chr.isdigit() for chr in targa[2:5]):
+        return targa
+    return ''
+
 def get_targa(frame, box, modello):
     reader = easyocr.Reader(['en'])
     roi = get_roi(frame, box)
-    result = reader.readtext(roi)
     text1 = None
-    text = ''
     #gestisco omografina nera
     try:
         omo = omografia(roi, modello)
-        result1 = reader.readtext(omo)
+        result1 = reader.readtext(omo, allowlist = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
         for detection in result1: 
             top_left = tuple(detection[0][0])
             bottom_right = tuple(detection[0][2])
             text1 = detection[1]
     except:
         text1 = ''
+    text = ''
+    result = reader.readtext(roi, allowlist = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
     for detection in result: 
         top_left = tuple(detection[0][0])
         bottom_right = tuple(detection[0][2])
         text = detection[1]
     if len(text1) >= len(text):
-        return text1
-    else:
-        return text
+        text = text1
+    return verifica_pattern(text)
 
 Conf_threshold = 0.6
 NMS_threshold = 0.4
@@ -80,6 +88,9 @@ dim = (int(frame_width), int(frame_height))
 print(dim)
 starting_time = time.time()
 frame_counter = 0
+text_vecchio = ''
+dec_prova = ''
+frames = 10
 while True:
     ret, frame = cap.read()
 
@@ -87,16 +98,35 @@ while True:
     frame = cv.resize(frame, dim, interpolation=cv.INTER_AREA)
     classes, scores, boxes = model.detect(frame, Conf_threshold, NMS_threshold)
     for (classid, score, box) in zip(classes, scores, boxes):
-        text = get_targa(frame, box, modello)
         color = COLORS[int(classid) % len(COLORS)]
-        label = "%s : %f targa: %s" % (class_name[classid], score, text)
-        cv.rectangle(frame, box, color, 1)
-        # cv.line(frame, (box[0]-3, box[1]-15),
-        #         (box[0]+110, box[1]-15), (0, 0, 0), 15)
-        cv.rectangle(frame, (box[0]-2, box[1]-20),
-                     (box[0]+230, box[1]-4), (100, 130, 100), -1)
-        cv.putText(frame, label, (box[0], box[1]-10),
-                   cv.FONT_HERSHEY_COMPLEX, 0.4, color, 1)
+        print(frames)
+        if text_vecchio == '' or dec_prova == '':
+            dec_prova = get_targa(frame, box, modello)
+            if dec_prova !='':
+                text_vecchio = dec_prova
+                label = "%s : %f targa: %s" % (class_name[classid], score, text_vecchio)
+                cv.rectangle(frame, box, color, 2)
+                cv.rectangle(frame, (box[0]-2, box[1]-40),(box[0]+400, box[1]-2), (100, 130, 100), -1)
+                cv.putText(frame, label, (box[0], box[1]-10),cv.FONT_HERSHEY_COMPLEX, 0.7, color, 1)
+            else:
+                label = "%s : %f Processing..." % (class_name[classid], score)
+                cv.rectangle(frame, box, color, 2)
+                cv.rectangle(frame, (box[0]-2, box[1]-40),(box[0]+400, box[1]-2), (100, 130, 100), -1)
+                cv.putText(frame, label, (box[0], box[1]-10),cv.FONT_HERSHEY_COMPLEX, 0.7, color, 1)
+        if dec_prova != '' and dec_prova != text_vecchio:
+            text_vecchio = ''
+            label = "%s : %f Processing..." % (class_name[classid], score)
+            cv.rectangle(frame, box, color, 2)
+            cv.rectangle(frame, (box[0]-2, box[1]-40),(box[0]+400, box[1]-2), (100, 130, 100), -1)
+            cv.putText(frame, label, (box[0], box[1]-10),cv.FONT_HERSHEY_COMPLEX, 0.7, color, 1)
+        if dec_prova != '' and text_vecchio == dec_prova and frames > 0:
+            label = "%s : %f targa: %s" % (class_name[classid], score, text_vecchio)
+            cv.rectangle(frame, box, color, 2)
+            cv.rectangle(frame, (box[0]-2, box[1]-40),(box[0]+400, box[1]-2), (100, 130, 100), -1)
+            cv.putText(frame, label, (box[0], box[1]-10),cv.FONT_HERSHEY_COMPLEX, 0.7, color, 1)
+            frames = frames - 1
+            if frames == 0:
+                text_vecchio = ''
     endingTime = time.time() - starting_time
     fps = frame_counter/endingTime
     cv.line(frame, (18, 43), (140, 43), (0, 0, 0), 27)
